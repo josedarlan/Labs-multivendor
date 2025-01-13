@@ -1,0 +1,146 @@
+#
+sysname HUAWEI-NE40-PE-R1
+#
+set neid 18a89
+#
+vsm on-board-mode enable
+#
+snmp-agent trap type base-trap
+#
+icmp rate-limit disable
+#
+router id 10.1.1.1
+#
+mpls lsr-id 10.1.1.1
+#
+mpls
+#
+mpls ldp
+ #
+ ipv4-family
+#               
+aaa
+ #
+ authentication-scheme default0
+ #
+ authentication-scheme default1
+ #
+ authentication-scheme default
+  authentication-mode local radius
+ #
+ authorization-scheme default
+ #
+ accounting-scheme default0
+ #
+ accounting-scheme default1
+ #
+ domain default0
+ #
+ domain default1
+ #
+ domain default_admin
+#
+license
+#               
+interface Ethernet1/0/0
+ undo shutdown
+ ip address 10.0.0.17 255.255.255.252
+ undo dcn
+ undo dcn mode vlan
+#
+interface Ethernet1/0/1
+ undo shutdown
+ ip address 10.0.0.9 255.255.255.252
+ ospf network-type p2p
+ ospf enable 1 area 0.0.0.0
+ mpls
+ mpls ldp
+ undo dcn
+ undo dcn mode vlan
+#
+interface Ethernet1/0/2
+ undo shutdown
+ ip address 10.0.0.1 255.255.255.252
+ ospf network-type p2p
+ ospf enable 1 area 0.0.0.0
+ mpls
+ mpls ldp       
+ undo dcn mode vlan
+#
+interface Ethernet1/0/3
+ undo shutdown
+ undo dcn mode vlan
+#
+interface Ethernet1/0/4
+ undo shutdown
+ undo dcn mode vlan
+#
+interface Ethernet1/0/5
+ undo shutdown
+ undo dcn mode vlan
+#
+interface Ethernet1/0/6
+ undo shutdown
+ undo dcn mode vlan
+#
+interface Ethernet1/0/7
+ undo shutdown
+ undo dcn mode vlan
+#
+interface Ethernet1/0/8
+ undo shutdown
+ undo dcn mode vlan
+#
+interface Ethernet1/0/9
+ undo shutdown
+ undo dcn mode vlan
+#
+interface GigabitEthernet0/0/0
+ undo shutdown
+#
+interface LoopBack0
+ ip address 10.1.1.1 255.255.255.255
+ ospf enable 1 area 0.0.0.0
+#
+interface NULL0
+#
+bgp 65000
+ peer 10.0.0.18 as-number 65500
+ peer 10.1.1.4 as-number 65000
+ peer 10.1.1.4 connect-interface LoopBack0
+ #
+ ipv4-family unicast
+  undo synchronization
+  peer 10.0.0.18 enable
+  peer 10.1.1.4 enable
+  peer 10.1.1.4 next-hop-local
+  peer 10.1.1.4 advertise-community
+#
+ospf 1
+ import-route direct
+ area 0.0.0.0
+  network 10.1.1.1 0.0.0.0
+#
+undo dcn
+#
+route recursive-lookup tunnel
+#
+lldp enable
+#
+ssh authorization-type default aaa
+#
+ssh server cipher aes256_gcm aes128_gcm aes256_ctr aes192_ctr aes128_ctr aes256_cbc aes128_cbc 3des_cbc
+#
+ssh server dh-exchange min-len 1024
+#
+ssh client cipher aes256_gcm aes128_gcm aes256_ctr aes192_ctr aes128_ctr aes256_cbc aes128_cbc 3des_cbc
+#
+user-interface con 0
+#
+user-interface aux 0
+#
+local-aaa-server
+#
+vm-manager
+#
+return

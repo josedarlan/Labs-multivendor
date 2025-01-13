@@ -1,0 +1,36 @@
+set version 14.1R1.10
+set system host-name Juniper-vMX-PE-04
+set system root-authentication encrypted-password "$1$iiqdh9ru$CBQygri2MkpfgtgdGo8GO1"
+set system login user lab uid 2000
+set system login user lab class super-user
+set system login user lab authentication encrypted-password "$1$oW1NeMUu$N7IVMfy8GfJ02jzQzJ39h/"
+set system services telnet connection-limit 5
+set system syslog user * any emergency
+set system syslog file messages any notice
+set system syslog file messages authorization info
+set system syslog file interactive-commands interactive-commands any
+set interfaces ge-0/0/0 unit 0 family inet address 10.0.0.14/30
+set interfaces ge-0/0/0 unit 0 family mpls maximum-labels 5
+set interfaces ge-0/0/1 unit 0 family inet address 10.0.0.6/30
+set interfaces ge-0/0/1 unit 0 family mpls maximum-labels 5
+set interfaces ge-0/0/2 unit 0 family inet address 10.0.0.21/30
+set interfaces lo0 unit 0 family inet address 10.1.1.4/32
+set routing-options autonomous-system 65000
+set protocols mpls interface ge-0/0/1.0
+set protocols mpls interface ge-0/0/0.0
+set protocols mpls interface lo0.0
+set protocols bgp group iBGP-PE-R1 local-address 10.1.1.4
+set protocols bgp group iBGP-PE-R1 export iBGP-PE-R1-OUT
+set protocols bgp group iBGP-PE-R1 peer-as 65000
+set protocols bgp group iBGP-PE-R1 neighbor 10.1.1.1
+set protocols bgp group eBGP-ASN65400 peer-as 65400
+set protocols bgp group eBGP-ASN65400 neighbor 10.0.0.22
+set protocols ospf area 0.0.0.0 interface ge-0/0/0.0 interface-type p2p
+set protocols ospf area 0.0.0.0 interface ge-0/0/1.0 interface-type p2p
+set protocols ospf area 0.0.0.0 interface lo0.0
+set protocols ldp interface ge-0/0/0.0
+set protocols ldp interface ge-0/0/1.0
+set protocols ldp interface lo0.0
+set policy-options policy-statement iBGP-PE-R1-OUT term 1 from route-filter 65.40.0.0/24 exact
+set policy-options policy-statement iBGP-PE-R1-OUT term 1 then next-hop self
+set policy-options policy-statement iBGP-PE-R1-OUT term 1 then accept

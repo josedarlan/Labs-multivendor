@@ -1,0 +1,125 @@
+Building configuration...
+
+Current configuration : 1299 bytes
+!
+! Last configuration change at 00:52:26 UTC Sun Jan 12 2025
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname CISCO-AS65400
+!
+boot-start-marker
+boot-end-marker
+!
+aqm-register-fnf
+!
+!
+no aaa new-model
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!         
+!
+!
+!
+!
+!
+!
+!
+
+
+!
+!
+!
+!
+no ip domain lookup
+ip cef
+ipv6 unicast-routing
+ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!         
+!
+!
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip address 65.40.0.1 255.255.255.255
+!
+interface Ethernet0/0
+ no ip address
+ shutdown
+!
+interface Ethernet0/1
+ no ip address
+ shutdown
+!
+interface Ethernet0/2
+ ip address 10.0.0.22 255.255.255.252
+!
+interface Ethernet0/3
+ no ip address
+ shutdown
+!
+router bgp 65400
+ bgp log-neighbor-changes
+ neighbor 10.0.0.21 remote-as 65000
+ !
+ address-family ipv4
+  network 65.40.0.0 mask 255.255.255.0
+  neighbor 10.0.0.21 activate
+  neighbor 10.0.0.21 soft-reconfiguration inbound
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip route 65.40.0.0 255.255.255.0 Null0
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+!
+end
