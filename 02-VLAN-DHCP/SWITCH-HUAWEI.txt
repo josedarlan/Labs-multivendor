@@ -1,0 +1,25 @@
+#
+sysname SWITCH-HUAWEI
+#
+vlan batch 100
+#
+vlan 100
+ name VLAN-100
+#
+interface GE1/0/0
+ undo shutdown
+ port link-type trunk
+ port trunk allow-pass vlan 100
+#
+interface GE1/0/1
+ undo shutdown
+ port default vlan 100
+#
+interface GE1/0/2
+ undo shutdown
+ port default vlan 100
+#
+interface GE1/0/3
+ undo shutdown
+ port default vlan 100
+#

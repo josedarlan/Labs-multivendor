@@ -1,0 +1,40 @@
+!
+hostname CISCO-R1
+!
+!
+ip dhcp excluded-address 172.16.100.1 172.16.100.9
+ip dhcp excluded-address 172.16.200.1 172.16.100.9
+!
+ip dhcp pool POOL-DHCP-VLAN100
+ network 172.16.100.0 255.255.255.0
+ default-router 172.16.100.1 
+ dns-server 8.8.8.8 
+ lease 5
+!
+ip dhcp pool POOL-DHCP-VLAN200
+ network 172.16.200.0 255.255.255.0
+ default-router 172.16.200.1 
+ dns-server 8.8.8.8 
+ lease infinite
+!
+!
+!
+no ip domain lookup
+!
+!
+interface Ethernet0/0
+no shut 
+!
+!
+interface Ethernet0/0.100
+ encapsulation dot1Q 100
+ ip address 172.16.100.1 255.255.255.0
+!
+interface Ethernet0/1
+no shut 
+!
+interface Ethernet0/1.200
+ encapsulation dot1Q 200
+ ip address 172.16.200.1 255.255.255.0
+!
+
