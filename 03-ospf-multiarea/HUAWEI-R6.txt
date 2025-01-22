@@ -1,0 +1,125 @@
+!Software Version V800R011C00SPC607B607
+!Last configuration was updated at 2025-01-21 21:46:20+00:00
+!Last configuration was saved at 2025-01-21 21:47:14+00:00
+#
+sysname HUAWEI-R6
+#
+set neid 18a89
+#
+vsm on-board-mode enable
+#
+snmp-agent trap type base-trap
+#
+icmp rate-limit disable
+#
+router id 10.6.6.6
+#
+aaa
+ #
+ authentication-scheme default0
+ #
+ authentication-scheme default1
+ #
+ authentication-scheme default
+  authentication-mode local radius
+ #
+ authorization-scheme default
+ #
+ accounting-scheme default0
+ #
+ accounting-scheme default1
+ #
+ domain default0
+ #
+ domain default1
+ #
+ domain default_admin
+#
+license
+#
+interface Ethernet1/0/0
+ undo shutdown
+ ip address 10.0.0.26 255.255.255.252
+ ospf network-type p2p
+ ospf enable 1 area 0.0.0.1
+ undo dcn
+ undo dcn mode vlan
+#
+interface Ethernet1/0/1
+ undo shutdown
+ undo dcn
+ undo dcn mode vlan
+#
+interface Ethernet1/0/2
+ undo shutdown
+ undo dcn mode vlan
+#
+interface Ethernet1/0/3
+ undo shutdown
+ undo dcn mode vlan
+#
+interface Ethernet1/0/4
+ undo shutdown
+ undo dcn mode vlan
+#
+interface Ethernet1/0/5
+ undo shutdown
+ undo dcn mode vlan
+#
+interface Ethernet1/0/6
+ undo shutdown
+ undo dcn mode vlan
+#
+interface Ethernet1/0/7
+ undo shutdown
+ undo dcn mode vlan
+#
+interface Ethernet1/0/8
+ undo shutdown
+ undo dcn mode vlan
+#
+interface Ethernet1/0/9
+ undo shutdown
+ undo dcn mode vlan
+#
+interface GigabitEthernet0/0/0
+ undo shutdown
+#
+interface LoopBack0
+ ip address 10.6.6.6 255.255.255.255
+#
+interface LoopBack2
+ ip address 172.16.0.1 255.255.255.255
+#
+interface NULL0
+#
+ospf 1
+ import-route static
+ area 0.0.0.1
+  network 10.6.6.6 0.0.0.0
+  nssa
+#
+undo dcn
+#
+ip route-static 172.16.0.0 255.255.255.0 NULL0
+#
+lldp enable
+#
+ssh authorization-type default aaa
+#
+ssh server cipher aes256_gcm aes128_gcm aes256_ctr aes192_ctr aes128_ctr aes256_cbc aes128_cbc 3des_cbc
+#
+ssh server dh-exchange min-len 1024
+#
+ssh client cipher aes256_gcm aes128_gcm aes256_ctr aes192_ctr aes128_ctr aes256_cbc aes128_cbc 3des_cbc
+#
+user-interface con 0
+#
+user-interface aux 0
+#
+local-aaa-server
+#
+vm-manager
+#
+return
+[~HUAWEI-R6
