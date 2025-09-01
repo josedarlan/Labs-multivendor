@@ -1,0 +1,32 @@
+set version 14.1R1.10
+set system host-name vMX9
+set system root-authentication encrypted-password "$1$iiqdh9ru$CBQygri2MkpfgtgdGo8GO1"
+set system login user lab uid 2000
+set system login user lab class super-user
+set system login user lab authentication encrypted-password "$1$oW1NeMUu$N7IVMfy8GfJ02jzQzJ39h/"
+set system services telnet connection-limit 5
+set system syslog user * any emergency
+set system syslog file messages any notice
+set system syslog file messages authorization info
+set system syslog file interactive-commands interactive-commands any
+set interfaces ge-0/0/0 unit 0 family inet address 10.0.0.14/30
+set interfaces ge-0/0/1 unit 0 family inet address 10.10.0.1/30
+set interfaces lo0 unit 0 family inet address 65.5.0.9/32
+set interfaces lo0 unit 0 family inet address 10.9.9.9/32
+set routing-options aggregate route 65.5.0.0/24 community 65500:1
+set routing-options autonomous-system 65500
+set protocols bgp group eBGP-ASN65400 type external
+set protocols bgp group eBGP-ASN65400 export eBGP-ASN65400-OUT
+set protocols bgp group eBGP-ASN65400 peer-as 65400
+set protocols bgp group eBGP-ASN65400 neighbor 10.0.0.13
+set protocols bgp group iBGP type internal
+set protocols bgp group iBGP export iBGP-OUT
+set protocols bgp group iBGP neighbor 10.10.0.2 peer-as 65500
+set policy-options policy-statement eBGP-ASN65400-OUT term ANUNCIA-MEU-PREFIXO from community ANUNCIA-PREFIXO
+set policy-options policy-statement eBGP-ASN65400-OUT term ANUNCIA-MEU-PREFIXO then accept
+set policy-options policy-statement iBGP-OUT term ROUTES-BGP from protocol bgp
+set policy-options policy-statement iBGP-OUT term ROUTES-BGP then next-hop self
+set policy-options policy-statement iBGP-OUT term ROUTES-BGP then accept
+set policy-options policy-statement iBGP-OUT term ANUNCIA-MEU-PREFIXO from community ANUNCIA-PREFIXO
+set policy-options policy-statement iBGP-OUT term ANUNCIA-MEU-PREFIXO then accept
+set policy-options community ANUNCIA-PREFIXO members 65500:1

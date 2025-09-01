@@ -1,0 +1,37 @@
+set version 14.1R1.10
+set system host-name vMX8
+set system root-authentication encrypted-password "$1$iiqdh9ru$CBQygri2MkpfgtgdGo8GO1"
+set system login user lab uid 2000
+set system login user lab class super-user
+set system login user lab authentication encrypted-password "$1$oW1NeMUu$N7IVMfy8GfJ02jzQzJ39h/"
+set system services telnet connection-limit 5
+set system syslog user * any emergency
+set system syslog file messages any notice
+set system syslog file messages authorization info
+set system syslog file interactive-commands interactive-commands any
+set chassis fpc 0 pic 0 tunnel-services bandwidth 1g
+set interfaces ge-0/0/0 unit 0 family inet address 65.3.0.2/30
+set interfaces ge-0/0/1 unit 0 family inet address 10.10.0.2/30
+set interfaces ge-0/0/2 unit 0 family inet address 192.168.14.1/24
+set interfaces gr-0/0/10 unit 0 clear-dont-fragment-bit
+set interfaces gr-0/0/10 unit 0 description GRE-TUNNEL-TO-VMX7
+set interfaces gr-0/0/10 unit 0 tunnel source 65.5.0.8
+set interfaces gr-0/0/10 unit 0 tunnel destination 65.3.0.7
+set interfaces gr-0/0/10 unit 0 family inet mtu 1476
+set interfaces gr-0/0/10 unit 0 family inet address 10.50.0.1/30
+set interfaces lo0 unit 0 family inet address 10.8.8.8/32
+set interfaces lo0 unit 0 family inet address 65.5.0.8/32
+set routing-options static route 192.168.13.0/24 next-hop 10.50.0.2
+set routing-options static route 192.168.13.0/24 no-readvertise
+set routing-options router-id 10.8.8.8
+set routing-options autonomous-system 65500
+set protocols bgp group iBGP type internal
+set protocols bgp group iBGP neighbor 10.10.0.1 peer-as 65500
+set protocols bgp group eBGP-AS65300 type external
+set protocols bgp group eBGP-AS65300 export eBGP-AS65300-OUT
+set protocols bgp group eBGP-AS65300 peer-as 65300
+set protocols bgp group eBGP-AS65300 neighbor 65.3.0.1
+set policy-options policy-statement eBGP-AS65300-OUT term ANUNCIA-MEU-PREFIXO from community ANUNCIA-PREFIXO
+set policy-options policy-statement eBGP-AS65300-OUT term ANUNCIA-MEU-PREFIXO then accept
+set policy-options policy-statement eBGP-AS65300-OUT then reject
+set policy-options community ANUNCIA-PREFIXO members 65500:1

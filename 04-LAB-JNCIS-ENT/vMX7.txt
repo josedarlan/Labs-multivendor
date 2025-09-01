@@ -1,0 +1,41 @@
+set version 14.1R1.10
+set system host-name vMX7
+set system root-authentication encrypted-password "$1$iiqdh9ru$CBQygri2MkpfgtgdGo8GO1"
+set system login user lab uid 2000
+set system login user lab class super-user
+set system login user lab authentication encrypted-password "$1$oW1NeMUu$N7IVMfy8GfJ02jzQzJ39h/"
+set system services telnet connection-limit 5
+set system syslog user * any emergency
+set system syslog file messages any notice
+set system syslog file messages authorization info
+set system syslog file interactive-commands interactive-commands any
+set chassis fpc 0 pic 0 tunnel-services bandwidth 1g
+set interfaces ge-0/0/0 unit 0 family inet address 192.168.13.1/24
+set interfaces ge-0/0/1 unit 0 family inet address 10.3.0.2/30
+set interfaces ge-0/0/1 unit 0 family iso
+set interfaces ge-0/0/2 unit 0 family inet address 10.3.0.5/30
+set interfaces ge-0/0/3 unit 0 family inet filter input FBF-R15-TO-R6-ge-0/0/2
+set interfaces ge-0/0/3 unit 0 family inet address 65.3.0.17/30
+set interfaces gr-0/0/10 unit 0 clear-dont-fragment-bit
+set interfaces gr-0/0/10 unit 0 description GRE-TUNNEL-TO-VMX8
+set interfaces gr-0/0/10 unit 0 tunnel source 65.3.0.7
+set interfaces gr-0/0/10 unit 0 tunnel destination 65.5.0.8
+set interfaces gr-0/0/10 unit 0 family inet mtu 1476
+set interfaces gr-0/0/10 unit 0 family inet address 10.50.0.2/30
+set interfaces lo0 unit 0 family inet address 10.7.7.7/32
+set interfaces lo0 unit 0 family inet address 65.3.0.7/32
+set interfaces lo0 unit 0 family iso address 49.0002.1077.7000.0000.00
+set routing-options interface-routes rib-group inet FBF-RIB-GROUP
+set routing-options static route 192.168.14.0/24 next-hop 10.50.0.1
+set routing-options static route 192.168.14.0/24 no-readvertise
+set routing-options rib-groups FBF-RIB-GROUP import-rib inet.0
+set routing-options rib-groups FBF-RIB-GROUP import-rib PBR-INSTANCE.inet.0
+set routing-options router-id 10.7.7.7
+set protocols isis level 2 wide-metrics-only
+set protocols isis interface ge-0/0/1.0 point-to-point
+set protocols isis interface ge-0/0/1.0 level 1 disable
+set protocols isis interface lo0.0 passive
+set firewall family inet filter FBF-R15-TO-R6-ge-0/0/2 term PREFIX-01 from source-address 65.3.0.16/30
+set firewall family inet filter FBF-R15-TO-R6-ge-0/0/2 term PREFIX-01 then routing-instance PBR-INSTANCE
+set routing-instances PBR-INSTANCE instance-type forwarding
+set routing-instances PBR-INSTANCE routing-options static route 0.0.0.0/0 next-hop 10.3.0.6
